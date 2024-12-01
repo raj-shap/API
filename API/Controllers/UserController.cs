@@ -30,18 +30,10 @@ namespace API.Controllers
             {
                 return BadRequest("Password and Confirm passoword must be same.");
             }
-
-            var passwordHasher = new PasswordHasher<object>();
-            string hashedPassword = passwordHasher.HashPassword(null, user.Password);
-            string hashedConfirmPassword = passwordHasher.HashPassword(null, user.ConfirmPassowrd);
-            var resultPassword = passwordHasher.VerifyHashedPassword(null, hashedPassword, user.Password);
-            var resultConfirmPassword = passwordHasher.VerifyHashedPassword(null, hashedConfirmPassword, user.ConfirmPassowrd);
-            if(resultPassword != PasswordVerificationResult.Success && resultConfirmPassword != PasswordVerificationResult.Success)
-            {
-                return BadRequest("issue in hashing passwored");
-            }
-            user.Password = hashedPassword;
-            user.ConfirmPassowrd = hashedConfirmPassword;
+            string encryptedPassword = UserAuth.EncryptSec(user.Password);
+            string encryptedConfirmPassword = UserAuth.EncryptSec(user.ConfirmPassowrd);
+            user.Password = encryptedPassword;
+            user.ConfirmPassowrd = encryptedConfirmPassword;
 
             //Generate a unique ID for the user
             user.UserID = IdGenerator.GenerateUniqueId();
