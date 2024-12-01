@@ -23,9 +23,9 @@ namespace API.Models
         //    [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,100}$",
         //    ErrorMessage = "Password must have at least one uppercase letter, one lowercase letter, one number, and one special character.")]
         public string Password { get; set; }
-        [Required]
+        //[Required]
         //[Compare("Password",ErrorMessage ="The Password and confirm Password do not match.")]
-        public string ConfirmPassowrd { get; set; }
+        //public string ConfirmPassowrd { get; set; }
         [Required]
         public string CreatedOn { get; set; }
         [Required]

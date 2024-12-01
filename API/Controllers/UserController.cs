@@ -26,14 +26,14 @@ namespace API.Controllers
             user.CreatedOn = DateTime.Now.ToString();
             user.ModifiedBy = DateTime.Now.ToString();
 
-            if(user.Password != user.ConfirmPassowrd)
-            {
-                return BadRequest("Password and Confirm passoword must be same.");
-            }
+            //if(user.Password != user.ConfirmPassowrd)
+            //{
+            //    return BadRequest("Password and Confirm passoword must be same.");
+            //}
             string encryptedPassword = UserAuth.EncryptSec(user.Password);
-            string encryptedConfirmPassword = UserAuth.EncryptSec(user.ConfirmPassowrd);
+            //string encryptedConfirmPassword = UserAuth.EncryptSec(user.ConfirmPassowrd);
             user.Password = encryptedPassword;
-            user.ConfirmPassowrd = encryptedConfirmPassword;
+            //user.ConfirmPassowrd = encryptedConfirmPassword;
 
             //Generate a unique ID for the user
             user.UserID = IdGenerator.GenerateUniqueId();
