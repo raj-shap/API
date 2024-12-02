@@ -27,11 +27,11 @@ namespace API.Models
         //[Compare("Password",ErrorMessage ="The Password and confirm Password do not match.")]
         //public string ConfirmPassowrd { get; set; }
         [Required]
-        public string CreatedOn { get; set; }
+        public DateTime CreatedOn { get; set; }  
         [Required]
         public string CreatedBy {  get; set; }
         [Required]
-        public string ModifiedOn { get; set; }
+        public DateTime ModifiedOn { get; set; }
         [Required]
         public string ModifiedBy { get; set; }
     }

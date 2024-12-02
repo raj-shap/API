@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using API.Helpers;
 using Azure.Messaging;
 using Microsoft.AspNetCore.Identity;
+using API.DTO;
 
 namespace API.Controllers
 {
@@ -17,26 +18,45 @@ namespace API.Controllers
             this.context = context;
         }
         [HttpPost]
-        public async Task<ActionResult<User>> CreateUser(User user)
+        public async Task<ActionResult<User>> CreateUser(User_DTO user_dto)
         {
-            if (user == null)
+            if (user_dto == null)
             {
                 return BadRequest("User Data is required.");
             }
-            user.CreatedOn = DateTime.Now.ToString();
-            user.ModifiedBy = DateTime.Now.ToString();
+            if(user_dto.dto_Password != user_dto.dto_ConfirmPassowrd)
+            {
+                return BadRequest("Password and Confirm Password must be same.");
+            }
+            var user = new User()
+            {
+                UserID = IdGenerator.GenerateUniqueId(),
+                Name = user_dto.dto_Name,
+                Email = user_dto.dto_Email,
+                Role = user_dto.dto_Role,
+                UserName = user_dto.dto_UserName,
+                phone = user_dto.dto_phone,
+                Password = UserAuth.EncryptSec(user_dto.dto_Password),
+                CreatedOn = DateTime.Now,
+                CreatedBy = user_dto.dto_CreatedBy,
+                ModifiedOn = DateTime.Now,
+                ModifiedBy = user_dto.dto_ModifiedBy,
 
-            //if(user.Password != user.ConfirmPassowrd)
-            //{
-            //    return BadRequest("Password and Confirm passoword must be same.");
-            //}
-            string encryptedPassword = UserAuth.EncryptSec(user.Password);
-            //string encryptedConfirmPassword = UserAuth.EncryptSec(user.ConfirmPassowrd);
-            user.Password = encryptedPassword;
-            //user.ConfirmPassowrd = encryptedConfirmPassword;
+            };
+            //user.CreatedOn = DateTime.Now;
+            //user.ModifiedOn = DateTime.Now;
 
-            //Generate a unique ID for the user
-            user.UserID = IdGenerator.GenerateUniqueId();
+            ////if(user.Password != user.ConfirmPassowrd)
+            ////{
+            ////    return BadRequest("Password and Confirm passoword must be same.");
+            ////}
+            //string encryptedPassword = UserAuth.EncryptSec(user.Password);
+            ////string encryptedConfirmPassword = UserAuth.EncryptSec(user.ConfirmPassowrd);
+            //user.Password = encryptedPassword;
+            ////user.ConfirmPassowrd = encryptedConfirmPassword;
+
+            ////Generate a unique ID for the user
+            //user.UserID = IdGenerator.GenerateUniqueId();
             await context.Users.AddAsync(user);
             await context.SaveChangesAsync();
             return Ok(user);
