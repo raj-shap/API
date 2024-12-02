@@ -5,6 +5,7 @@ using API.Helpers;
 using Azure.Messaging;
 using Microsoft.AspNetCore.Identity;
 using API.DTO;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
@@ -24,6 +25,13 @@ namespace API.Controllers
             {
                 return BadRequest("User Data is required.");
             }
+            bool userExist = await context.Users.AnyAsync(u => u.Email == user_dto.dto_Email || u.phone == user_dto.dto_phone);
+
+            if (userExist)
+            {
+                return BadRequest("A user is already registered with email or phone");
+            }
+
             if(user_dto.dto_Password != user_dto.dto_ConfirmPassowrd)
             {
                 return BadRequest("Password and Confirm Password must be same.");
@@ -61,6 +69,8 @@ namespace API.Controllers
             await context.SaveChangesAsync();
             return Ok(user);
         }
+
+        
 
     }
 }
