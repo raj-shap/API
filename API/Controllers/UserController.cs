@@ -18,37 +18,37 @@ namespace API.Controllers
         {
             this.context = context;
         }
-        [HttpPost]
-        public async Task<ActionResult<User>> CreateUser(User_DTO user_dto)
+        [HttpPost("Reginstration")]
+        public async Task<ActionResult<User>> CreateUser(Registration_DTO registration_dto)
         {
-            if (user_dto == null)
+            if (registration_dto == null)
             {
                 return BadRequest("User Data is required.");
             }
-            bool userExist = await context.Users.AnyAsync(u => u.Email == user_dto.dto_Email || u.phone == user_dto.dto_phone);
+            bool userExist = await context.Users.AnyAsync(u => u.Email == registration_dto.dto_Email || u.phone == registration_dto.dto_phone);
 
             if (userExist)
             {
                 return BadRequest("A user is already registered with email or phone");
             }
 
-            if(user_dto.dto_Password != user_dto.dto_ConfirmPassowrd)
+            if(registration_dto.dto_Password != registration_dto.dto_ConfirmPassowrd)
             {
                 return BadRequest("Password and Confirm Password must be same.");
             }
             var user = new User()
             {
                 UserID = IdGenerator.GenerateUniqueId(),
-                Name = user_dto.dto_Name,
-                Email = user_dto.dto_Email,
-                Role = user_dto.dto_Role,
-                UserName = user_dto.dto_UserName,
-                phone = user_dto.dto_phone,
-                Password = UserAuth.EncryptSec(user_dto.dto_Password),
+                Name = registration_dto.dto_Name,
+                Email = registration_dto.dto_Email,
+                Role = registration_dto.dto_Role,
+                UserName = registration_dto.dto_UserName,
+                phone = registration_dto.dto_phone,
+                Password = UserAuth.EncryptSec(registration_dto.dto_Password),
                 CreatedOn = DateTime.Now,
-                CreatedBy = user_dto.dto_CreatedBy,
+                CreatedBy = registration_dto.dto_CreatedBy,
                 ModifiedOn = DateTime.Now,
-                ModifiedBy = user_dto.dto_ModifiedBy,
+                ModifiedBy = registration_dto.dto_ModifiedBy,
 
             };
             //user.CreatedOn = DateTime.Now;
@@ -69,8 +69,37 @@ namespace API.Controllers
             await context.SaveChangesAsync();
             return Ok(user);
         }
+        [HttpPost("Login")]
+        public async Task<ActionResult> Login(Login_DTO login_DTO)
+        {
+            var user = await context.Users.FirstOrDefaultAsync(u=> u.Email == login_DTO.UserName || u.phone == login_DTO.UserName);
+            //var user = await context.Users.FirstOrDefaultAsync(u=> u.Email == login_DTO.UserName);
+            if (user == null || string.IsNullOrEmpty(user.UserName) || string.IsNullOrEmpty(user.Password))
+            {
+                return BadRequest("User Not Found");
+            }
+            if (login_DTO == null || string.IsNullOrEmpty(login_DTO.UserName) || string.IsNullOrEmpty(login_DTO.Password) ){
+                return BadRequest("Invalid Credentials.");
+            }
+            if(UserAuth.DecryptSec(user.Password)!= login_DTO.Password)
+            {
+                return BadRequest("Invalid Credentials.");
+            }
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine(UserAuth.DecryptSec(user.Password));
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine();
+            return Ok("Login Successfully");
 
-        
+        }
+
+
+
 
     }
 }
