@@ -85,15 +85,6 @@ namespace API.Controllers
             {
                 return BadRequest("Invalid Credentials.");
             }
-            Console.WriteLine();
-            Console.WriteLine();
-            Console.WriteLine();
-            Console.WriteLine();
-            Console.WriteLine(UserAuth.DecryptSec(user.Password));
-            Console.WriteLine();
-            Console.WriteLine();
-            Console.WriteLine();
-            Console.WriteLine();
             return Ok("Login Successfully");
 
         }
