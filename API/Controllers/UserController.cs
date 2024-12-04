@@ -62,7 +62,7 @@ namespace API.Controllers
             ////string encryptedConfirmPassword = UserAuth.EncryptSec(user.ConfirmPassowrd);
             //user.Password = encryptedPassword;
             ////user.ConfirmPassowrd = encryptedConfirmPassword;
-
+            //user.UserID = IdGenerator.GenerateUniqueId();
             ////Generate a unique ID for the user
             await context.Users.AddAsync(user);
             await context.SaveChangesAsync();
