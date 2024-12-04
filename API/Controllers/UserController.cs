@@ -88,8 +88,8 @@ namespace API.Controllers
             return Ok("Login Successfully");
 
         }
-        //[HttpPost]
-        //public Task<ActionResult> 
+        [HttpPost("add-Role")]
+        public Task<ActionResult> 
 
 
 
