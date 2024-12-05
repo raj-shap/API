@@ -36,9 +36,10 @@ namespace API.Controllers
             {
                 return BadRequest("Password and Confirm Password must be same.");
             }
+            registration_dto.dto_UserID = IdGenerator.GenerateUniqueId();
             var user = new User()
             {
-                UserID = IdGenerator.GenerateUniqueId(),
+                UserID = registration_dto.dto_UserID,
                 Name = registration_dto.dto_Name,
                 Email = registration_dto.dto_Email,
                 Role = registration_dto.dto_Role,
@@ -84,14 +85,68 @@ namespace API.Controllers
             {
                 return BadRequest("Invalid Credentials.");
             }
+            var getUserId = (await context.Users.FirstOrDefaultAsync(u => u.Email == login_DTO.UserName || u.phone == login_DTO.UserName)).UserID;
+            var getRoleId = (await context.UserRoles.FirstOrDefaultAsync(r => r.UserId == getUserId)).RoleId;
+            var roleName = (await context.Roles.FirstOrDefaultAsync(r => r.id == getRoleId)).Name;
+            
             return Ok("Login Successfully");
 
         }
         [HttpPost("add-Role")]
-        public Task<ActionResult> 
+        public async Task<ActionResult> AddRole([FromBody]Roles_DTO roles_DTO)
+        {
+            if(roles_DTO == null)
+            {
+                BadRequest("Role Name is Required.");
+            }
+            bool RoleExist = await context.Roles.AnyAsync(r=> r.Name == roles_DTO.Name);
+            if (RoleExist)
+            {
+                BadRequest("Role Already Created");
+            }
+            roles_DTO.id = IdGenerator.GenerateUniqueId();
+            var roles = new Roles()
+            {
+                id = roles_DTO.id,
+                Name = roles_DTO.Name
+            }; 
+            await context.Roles.AddAsync(roles);
+            await context.SaveChangesAsync();
+            return Ok(roles);
+        }
 
-
-
+        [HttpPost("assign-role")]
+        public async Task<ActionResult> AssignRole([FromBody]UserRoles_DTO userRoles_DTO)
+        {
+            if(userRoles_DTO.UserName == null)
+            {
+                return BadRequest("UserId required");
+            }
+            if(userRoles_DTO.RoleName == null)
+            {
+                return BadRequest("RoleId required");
+            }
+            bool UserExist = await context.Users.AnyAsync(u => u.Email == userRoles_DTO.UserName);
+            bool RoleExist = await context.Roles.AnyAsync(r=> r.Name == userRoles_DTO.RoleName);
+            if (!UserExist)
+            {
+                return NotFound("User not Exist");
+            }
+            if(!RoleExist)
+            {
+                return NotFound("Role not Exist");
+            }
+            var uid = (await context.Users.FirstOrDefaultAsync(u => u.Email == userRoles_DTO.UserName)).UserID;
+            var roleId = (await context.Roles.FirstOrDefaultAsync(r => r.Name == userRoles_DTO.RoleName)).id;
+            var userRoles = new UserRoles()
+            {
+                UserId = uid,
+                RoleId = roleId
+            };
+            await context.UserRoles.AddAsync(userRoles);
+            await context.SaveChangesAsync();
+            return Ok(userRoles);
+        }
 
     }
 }

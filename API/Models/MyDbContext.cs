@@ -10,5 +10,7 @@ namespace API.Models
         {
         }
         public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<Roles> Roles { get; set; }
+        public virtual DbSet<UserRoles> UserRoles { get; set; }
     }
 }
