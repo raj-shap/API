@@ -28,5 +28,6 @@ namespace API.DTO
 		public DateTime dto_ModifiedOn { get; set; }
 		[Required]
 		public string dto_ModifiedBy { get; set; }
-	}
+        public List<string> Errors { get; set; } = new List<string>();
+    }
 }

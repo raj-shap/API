@@ -1,7 +1,7 @@
 ﻿using Microsoft.Identity.Client;
 using System.ComponentModel.DataAnnotations;
 
-namespace API.Models
+namespace API.Models.Auth
 {
     public class User
     {
@@ -27,9 +27,9 @@ namespace API.Models
         //[Compare("Password",ErrorMessage ="The Password and confirm Password do not match.")]
         //public string ConfirmPassowrd { get; set; }
         [Required]
-        public DateTime CreatedOn { get; set; }  
+        public DateTime CreatedOn { get; set; }
         [Required]
-        public string CreatedBy {  get; set; }
+        public string CreatedBy { get; set; }
         [Required]
         public DateTime ModifiedOn { get; set; }
         [Required]

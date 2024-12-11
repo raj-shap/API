@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    [Migration("20241205094509_Update Roles")]
-    partial class UpdateRoles
+    [Migration("20241205205351_Updated")]
+    partial class Updated
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,7 +25,7 @@ namespace API.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("API.Models.Roles", b =>
+            modelBuilder.Entity("API.Models.Role", b =>
                 {
                     b.Property<string>("id")
                         .HasColumnType("nvarchar(450)");
@@ -36,7 +36,7 @@ namespace API.Migrations
 
                     b.HasKey("id");
 
-                    b.ToTable("Roles");
+                    b.ToTable("Role");
                 });
 
             modelBuilder.Entity("API.Models.User", b =>
@@ -97,15 +97,38 @@ namespace API.Migrations
 
                     b.Property<string>("RoleId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("RoleId");
+
+                    b.HasIndex("UserId");
+
                     b.ToTable("UserRoles");
+                });
+
+            modelBuilder.Entity("API.Models.UserRoles", b =>
+                {
+                    b.HasOne("API.Models.Role", "Role")
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("API.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Role");
+
+                    b.Navigation("User");
                 });
 #pragma warning restore 612, 618
         }

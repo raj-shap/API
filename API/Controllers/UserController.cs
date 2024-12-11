@@ -6,6 +6,7 @@ using Azure.Messaging;
 using Microsoft.AspNetCore.Identity;
 using API.DTO;
 using Microsoft.EntityFrameworkCore;
+using API.Models.Auth;
 
 namespace API.Controllers
 {
@@ -18,24 +19,33 @@ namespace API.Controllers
         {
             this.context = context;
         }
-        [HttpPost("Reginstration")]
+        [HttpPost("Registration")]
         public async Task<ActionResult<User>> CreateUser(Registration_DTO registration_dto)
         {
+            var response = new Registration_DTO();
             if (registration_dto == null)
             {
-                return BadRequest("User Data is required.");
+                response.Errors.Add("User Data is required");
+                return BadRequest(response);
             }
             bool userExist = await context.Users.AnyAsync(u => u.Email == registration_dto.dto_Email || u.phone == registration_dto.dto_phone);
 
             if (userExist)
             {
-                return BadRequest("A user is already registered with email or phone");
+                response.Errors.Add("A user is already registered with email or phone");
+                //return BadRequest("A user is already registered with email or phone");
             }
 
             if(registration_dto.dto_Password != registration_dto.dto_ConfirmPassowrd)
             {
-                return BadRequest("Password and Confirm Password must be same.");
+                response.Errors.Add("Password and Confirm Password must be same.");
+                //return BadRequest("Password and Confirm Password must be same.");
             }
+            if(response.Errors.Count > 0)
+            {
+                return BadRequest(response);
+            }
+
             registration_dto.dto_UserID = IdGenerator.GenerateUniqueId();
             var user = new User()
             {
@@ -46,8 +56,10 @@ namespace API.Controllers
                 UserName = registration_dto.dto_UserName,
                 phone = registration_dto.dto_phone,
                 Password = UserAuth.EncryptSec(registration_dto.dto_Password),
+                //CreatedOn = registration_dto.dto_CreatedOn,
                 CreatedOn = DateTime.Now,
                 CreatedBy = registration_dto.dto_CreatedBy,
+                //ModifiedOn = registration_dto.dto_ModifiedOn,
                 ModifiedOn = DateTime.Now,
                 ModifiedBy = registration_dto.dto_ModifiedBy,
 
@@ -87,7 +99,7 @@ namespace API.Controllers
             }
             var getUserId = (await context.Users.FirstOrDefaultAsync(u => u.Email == login_DTO.UserName || u.phone == login_DTO.UserName)).UserID;
             var getRoleId = (await context.UserRoles.FirstOrDefaultAsync(r => r.UserId == getUserId)).RoleId;
-            var roleName = (await context.Roles.FirstOrDefaultAsync(r => r.id == getRoleId)).Name;
+            var roleName = (await context.Role.FirstOrDefaultAsync(r => r.id == getRoleId)).Name;
             
             return Ok("Login Successfully");
 
@@ -99,18 +111,18 @@ namespace API.Controllers
             {
                 BadRequest("Role Name is Required.");
             }
-            bool RoleExist = await context.Roles.AnyAsync(r=> r.Name == roles_DTO.Name);
+            bool RoleExist = await context.Role.AnyAsync(r=> r.Name == roles_DTO.Name);
             if (RoleExist)
             {
                 BadRequest("Role Already Created");
             }
             roles_DTO.id = IdGenerator.GenerateUniqueId();
-            var roles = new Roles()
+            var roles = new Role()
             {
                 id = roles_DTO.id,
                 Name = roles_DTO.Name
             }; 
-            await context.Roles.AddAsync(roles);
+            await context.Role.AddAsync(roles);
             await context.SaveChangesAsync();
             return Ok(roles);
         }
@@ -127,7 +139,7 @@ namespace API.Controllers
                 return BadRequest("RoleId required");
             }
             bool UserExist = await context.Users.AnyAsync(u => u.Email == userRoles_DTO.UserName);
-            bool RoleExist = await context.Roles.AnyAsync(r=> r.Name == userRoles_DTO.RoleName);
+            bool RoleExist = await context.Role.AnyAsync(r=> r.Name == userRoles_DTO.RoleName);
             if (!UserExist)
             {
                 return NotFound("User not Exist");
@@ -137,7 +149,7 @@ namespace API.Controllers
                 return NotFound("Role not Exist");
             }
             var uid = (await context.Users.FirstOrDefaultAsync(u => u.Email == userRoles_DTO.UserName)).UserID;
-            var roleId = (await context.Roles.FirstOrDefaultAsync(r => r.Name == userRoles_DTO.RoleName)).id;
+            var roleId = (await context.Role.FirstOrDefaultAsync(r => r.Name == userRoles_DTO.RoleName)).id;
             var userRoles = new UserRoles()
             {
                 UserId = uid,
