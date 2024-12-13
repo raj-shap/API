@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace API.Models.Employee
+namespace API.DTO.Employee
 {
-    public class ResignedEmployee
+    public class ResignedEmployee_DTO
     {
         [Required]
         public string Id { get; set; }

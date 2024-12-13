@@ -4,9 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 using API.Helpers;
 using Azure.Messaging;
 using Microsoft.AspNetCore.Identity;
-using API.DTO;
 using Microsoft.EntityFrameworkCore;
 using API.Models.Auth;
+using API.DTO.Auth;
 
 namespace API.Controllers
 {

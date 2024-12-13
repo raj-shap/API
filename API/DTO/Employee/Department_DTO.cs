@@ -1,12 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace API.Models.Employee
+namespace API.DTO.Employee
 {
-    public class Positin
+    public class Department_DTO
     {
         [Required]
         public int Id { get; set; }
         [Required]
-        public string PositionName { get; set; }
+        public string DepartmentName { get; set; }
     }
 }

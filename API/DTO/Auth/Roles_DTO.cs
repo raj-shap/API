@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace API.Models.Auth
+namespace API.DTO.Auth
 {
-    public class Role
+    public class Roles_DTO
     {
         [Required]
         public string id { get; set; }

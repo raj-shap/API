@@ -1,4 +1,4 @@
-﻿using API.DTO;
+﻿using API.DTO.Auth;
 
 namespace API.Repository
 {
