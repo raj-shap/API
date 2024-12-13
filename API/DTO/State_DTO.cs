@@ -1,8 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace API.Models
+﻿namespace API.DTO
 {
-    public class State
+    public class State_DTO
     {
         [Required]
         public int Id { get; set; }

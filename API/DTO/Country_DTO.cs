@@ -1,7 +1,6 @@
-﻿using Mono.TextTemplating;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace API.Models
+namespace API.DTO
 {
     public class Country_DTO
     {
@@ -9,6 +8,6 @@ namespace API.Models
         public int Id { get; set; }
         [Required]
         public string CountryName { get; set; }
-        public ICollection<State> States { get; set; }
+        public ICollection<State_DTO> States { get; set; }
     }
 }

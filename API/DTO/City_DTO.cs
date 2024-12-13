@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace API.Models
+namespace API.DTO
 {
     public class City_DTO
     {
@@ -9,6 +9,6 @@ namespace API.Models
         public string CityName { get; set; }
         [Required]
         public int StateId { get; set; }
-        public State State { get; set; }
+        public State_DTO State { get; set; }
     }
 }
