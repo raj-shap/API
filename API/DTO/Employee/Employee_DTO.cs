@@ -5,58 +5,63 @@ namespace API.DTO.Employee
     public class Employee_DTO
     {
         [Required]
-        public string Id { get; set; }
+        public string dto_Id { get; set; }
 
 
         /////////////// :Personal Information: ///////////////
 
         [Required]
-        public string UserName { get; set; }
+        public string dto_UserName { get; set; }
         [Required]
-        public string FirstName { get; set; }
+        public string dto_FirstName { get; set; }
         [Required]
-        public string MiddleName { get; set; }
+        public string dto_MiddleName { get; set; }
         [Required]
-        public string LastName { get; set; }
+        public string dto_LastName { get; set; }
         [Required]
-        public string Dob { get; set; }
+        public string dto_Dob { get; set; }
         [Required]
-        public string Address { get; set; }
+        public string dto_Address { get; set; }
         [Required]
-        public string City { get; set; }
+        public string dto_City { get; set; }
         [Required]
-        public string State { get; set; }
+        public string dto_State { get; set; }
         [Required]
-        public string Country { get; set; }
+        public string dto_Country { get; set; }
         [Required]
-        public string PostalCode { get; set; }
+        public string dto_PostalCode { get; set; }
         [Required]
-        public string Phone { get; set; }
+        public string dto_Phone { get; set; }
         [Required]
-        public string EmergencyContactName { get; set; }
+        public string dto_EmergencyContactName { get; set; }
         [Required]
-        public string EmergencyContact { get; set; }
+        public string dto_EmergencyContact { get; set; }
         [Required]
-        public string Email { get; set; }
+        public string dto_Email { get; set; }
 
         /////////////// :Position Information: ///////////////
         [Required]
-        public string Department { get; set; }
+        public string dto_Department { get; set; }
         [Required]
-        public string Position { get; set; } // Intern | Junior | Senior | Manager | HOD | BOD 
+        public string dto_Position { get; set; } // Intern | Junior | Senior | Manager | HOD | BOD 
         [Required]
-        public string ReportTo { get; set; }
+        public string dto_ReportTo { get; set; }
         [Required]
-        public string EmployeementType { get; set; } // part time | full time | remote | hybrid
+        public string dto_EmployeementType { get; set; } // part time | full time | remote | hybrid
+        /// <summary>
+        /// ////////////////////
+        /// </summary>
         [Required]
-        public DateTime StartDate { get; set; }
+        public string dto_Status { get; set; } // Active | Inactive(Resigned) | Deleted | onNoticePeriod
         [Required]
-        public DateTime CreatedOn { get; set; }
+        public DateTime dto_StartDate { get; set; }
         [Required]
-        public string CreatedBy { get; set; }
+        public DateTime dto_CreatedOn { get; set; }
         [Required]
-        public DateTime ModifiedOn { get; set; }
+        public string dto_CreatedBy { get; set; }
         [Required]
-        public string ModifiedBy { get; set; }
+        public DateTime dto_ModifiedOn { get; set; }
+        [Required]
+        public string dto_ModifiedBy { get; set; }
     }
 }

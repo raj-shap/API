@@ -5,8 +5,8 @@ namespace API.DTO.Auth
     public class Roles_DTO
     {
         [Required]
-        public string id { get; set; }
+        public string dto_id { get; set; }
         [Required]
-        public string Name { get; set; }
+        public string dto_Name { get; set; }
     }
 }

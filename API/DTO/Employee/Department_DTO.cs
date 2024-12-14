@@ -5,8 +5,8 @@ namespace API.DTO.Employee
     public class Department_DTO
     {
         [Required]
-        public int Id { get; set; }
+        public int dto_Id { get; set; }
         [Required]
-        public string DepartmentName { get; set; }
+        public string dto_DepartmentName { get; set; }
     }
 }

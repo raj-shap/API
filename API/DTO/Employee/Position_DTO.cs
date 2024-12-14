@@ -5,7 +5,7 @@ namespace API.DTO.Employee
     public class Position_DTO
     {
         [Required]
-        public int Id { get; set; }
+        public int dto_Id { get; set; }
         [Required]
-        public string PositionName{get; set;}
+        public string dto_PositionName{get; set;}
 }

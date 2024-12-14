@@ -6,9 +6,9 @@ namespace API.DTO
     {
         [Required]
         public int Id { get; set; }
+        [Required]
         public string CityName { get; set; }
         [Required]
         public int StateId { get; set; }
-        public State_DTO State { get; set; }
     }
 }

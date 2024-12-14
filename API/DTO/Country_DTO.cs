@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿
+using System.ComponentModel.DataAnnotations;
 
 namespace API.DTO
 {
@@ -8,6 +9,6 @@ namespace API.DTO
         public int Id { get; set; }
         [Required]
         public string CountryName { get; set; }
-        public ICollection<State_DTO> States { get; set; }
+        
     }
 }

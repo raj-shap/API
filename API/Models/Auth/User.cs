@@ -26,6 +26,7 @@ namespace API.Models.Auth
         //[Required]
         //[Compare("Password",ErrorMessage ="The Password and confirm Password do not match.")]
         //public string ConfirmPassowrd { get; set; }
+        public string Status { get; set; } //Active | Inactive
         [Required]
         public DateTime CreatedOn { get; set; }
         [Required]

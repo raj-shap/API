@@ -9,7 +9,7 @@ namespace API.Models.Employee
         [Required]
         public string EmpId { get; set; }
         [Required]
-        public Employee Employee { get; set; }
+        public EmployeeDetails Employee { get; set; }
         [Required]
         public DateTime ResignedDate { get; set; }
         [Required]

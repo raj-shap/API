@@ -6,33 +6,28 @@ namespace API.DTO
     public class Task_DTO
     {
         [Required]
-        public string Id { get; set; }
+        public string dto_Id { get; set; }
         [Required]
-        public string TaskName { get; set; }
+        public string dto_TaskName { get; set; }
         [Required]
-        public string Description { get; set; }
+        public string dto_Description { get; set; }
         [Required]
-        public string SubTask { get; set; }
+        public string dto_SubTask { get; set; }
         [Required]
-        public string AssignedBy { get; set; }
+        public string dto_AssignedBy { get; set; }
         [Required]
-        public User UserId { get; set; }
+        public DateTime dto_AssignedDate { get; set; }
         [Required]
-        public DateTime AssignedDate { get; set; }
+        public string dto_Status { get; set; }
         [Required]
-        public string Status { get; set; }
+        public string dto_Remark { get; set; }
         [Required]
-        public string Remark { get; set; }
+        public DateTime dto_CreatedOn { get; set; }
         [Required]
-        public DateTime CreatedOn { get; set; }
+        public DateTime dto_ModifiedOn { get; set; }
         [Required]
-        public DateTime ModifiedOn { get; set; }
+        public string dto_CreatedBy { get; set; }
         [Required]
-        public String CreatedBy { get; set; }
-        public User user { get; set; }
-        [Required]
-        public string ModifiedBy { get; set; }
-        [Required]
-        public User User { get; set; }
+        public string dto_ModifiedBy { get; set; }
     }
 }

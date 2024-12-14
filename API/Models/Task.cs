@@ -20,7 +20,7 @@ namespace API.Models
         [Required]
         public DateTime AssignedDate { get; set; }
         [Required]
-        public string Status { get; set; }
+        public string Status { get; set; } //Done | Pending | Running
         [Required]
         public string Remark { get; set; }
         [Required]

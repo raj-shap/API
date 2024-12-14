@@ -2,7 +2,7 @@
 
 namespace API.Models.Inventory
 {
-    public class AvailableLaptopAndDesktop
+    public class LaptopAndDesktop
     {
         [Required]
         public int Id { get; set; }
@@ -11,7 +11,7 @@ namespace API.Models.Inventory
         [Required]
         public string ModelNumber { get; set; }
         [Required]
-        public string Status { get; set; }
+        public string Status { get; set; } // Available | assigned | Scrap
         [Required]
         public string RamSize { get; set; }
         [Required]

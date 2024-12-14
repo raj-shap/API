@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace API.Models.Employee
 {
-    public class Employee
+    public class EmployeeDetails
     {
         [Required]
         public string Id { get; set; }
@@ -47,8 +47,15 @@ namespace API.Models.Employee
         public string Position { get; set; } // Intern | Junior | Senior | Manager | HOD | BOD 
         [Required]
         public string ReportTo { get; set; }
+        public EmployeeDetails employeeDetails { get; set; }
         [Required]
         public string EmployeementType { get; set; } // part time | full time | remote | hybrid
+
+        /// <summary>
+        /// ////////////////////
+        /// </summary>
+        [Required]
+        public string Status { get; set; } // Active | Inactive(Resigned) | Deleted | onNoticePeriod
         [Required]
         public DateTime StartDate { get; set; }
         [Required]
