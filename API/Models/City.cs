@@ -2,7 +2,7 @@
 
 namespace API.Models
 {
-    public class City_DTO
+    public class City
     {
         [Required]
         public int Id { get; set; }

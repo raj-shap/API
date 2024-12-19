@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace API.Models
 {
-    public class Country_DTO
+    public class Country
     {
         [Required]
         public int Id { get; set; }

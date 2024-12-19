@@ -2,7 +2,7 @@
 
 namespace API.Models.Employee
 {
-    public class Positin
+    public class Position
     {
         [Required]
         public int Id { get; set; }

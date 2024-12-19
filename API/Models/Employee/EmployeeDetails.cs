@@ -42,11 +42,13 @@ namespace API.Models.Employee
 
         /////////////// :Position Information: ///////////////
         [Required]
-        public string Department { get; set; }
+        public int Department { get; set; }
+        public Department department { get; set; }
         [Required]
-        public string Position { get; set; } // Intern | Junior | Senior | Manager | HOD | BOD 
+        public int Position { get; set; } // Intern | Junior | Senior | Manager | HOD | BOD
+        public Position position { get; set; }
         [Required]
-        public string ReportTo { get; set; }
+        public string? ReportTo { get; set; }
         public EmployeeDetails employeeDetails { get; set; }
         [Required]
         public string EmployeementType { get; set; } // part time | full time | remote | hybrid

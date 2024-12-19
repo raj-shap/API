@@ -1,6 +1,6 @@
 ﻿namespace API.Models
 {
-    public class SupplierVendro
+    public class SupplierVendor
     {
         public string Id {  get; set; }
         public string Name { get; set; }

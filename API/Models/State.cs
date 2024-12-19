@@ -8,9 +8,9 @@ namespace API.Models
         public int Id { get; set; }
         [Required]
         public string StateName { get; set; }
-        public ICollection<City_DTO> Cities { get; set; }
+        public ICollection<City> Cities { get; set; }
         [Required]
         public int CountryId { get; set; }
-        public Country_DTO Country { get; set; }
+        public Country Country { get; set; }
     }
 }

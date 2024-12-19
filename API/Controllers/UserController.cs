@@ -84,20 +84,20 @@ namespace API.Controllers
         [HttpPost("Login")]
         public async Task<ActionResult> Login(Login_DTO login_DTO)
         {
-            var user = await context.Users.FirstOrDefaultAsync(u=> u.Email == login_DTO.UserName || u.phone == login_DTO.UserName);
+            var user = await context.Users.FirstOrDefaultAsync(u=> u.Email == login_DTO.dto_UserName || u.phone == login_DTO.dto_UserName);
             //var user = await context.Users.FirstOrDefaultAsync(u=> u.Email == login_DTO.UserName);
             if (user == null || string.IsNullOrEmpty(user.UserName) || string.IsNullOrEmpty(user.Password))
             {
                 return BadRequest("User Not Found");
             }
-            if (login_DTO == null || string.IsNullOrEmpty(login_DTO.UserName) || string.IsNullOrEmpty(login_DTO.Password) ){
+            if (login_DTO == null || string.IsNullOrEmpty(login_DTO.dto_UserName) || string.IsNullOrEmpty(login_DTO.dto_Password) ){
                 return BadRequest("Invalid Credentials.");
             }
-            if(UserAuth.DecryptSec(user.Password)!= login_DTO.Password)
+            if(UserAuth.DecryptSec(user.Password)!= login_DTO.dto_Password)
             {
                 return BadRequest("Invalid Credentials.");
             }
-            var getUserId = (await context.Users.FirstOrDefaultAsync(u => u.Email == login_DTO.UserName || u.phone == login_DTO.UserName)).UserID;
+            var getUserId = (await context.Users.FirstOrDefaultAsync(u => u.Email == login_DTO.dto_UserName || u.phone == login_DTO.dto_UserName)).UserID;
             var getRoleId = (await context.UserRoles.FirstOrDefaultAsync(r => r.UserId == getUserId)).RoleId;
             var roleName = (await context.Role.FirstOrDefaultAsync(r => r.id == getRoleId)).Name;
             
@@ -111,16 +111,16 @@ namespace API.Controllers
             {
                 BadRequest("Role Name is Required.");
             }
-            bool RoleExist = await context.Role.AnyAsync(r=> r.Name == roles_DTO.Name);
+            bool RoleExist = await context.Role.AnyAsync(r=> r.Name == roles_DTO.dto_Name);
             if (RoleExist)
             {
                 BadRequest("Role Already Created");
             }
-            roles_DTO.id = IdGenerator.GenerateUniqueId();
+            roles_DTO.dto_id = IdGenerator.GenerateUniqueId();
             var roles = new Role()
             {
-                id = roles_DTO.id,
-                Name = roles_DTO.Name
+                id = roles_DTO.dto_id,
+                Name = roles_DTO.dto_Name
             }; 
             await context.Role.AddAsync(roles);
             await context.SaveChangesAsync();
@@ -130,16 +130,16 @@ namespace API.Controllers
         [HttpPost("assign-role")]
         public async Task<ActionResult> AssignRole([FromBody]UserRoles_DTO userRoles_DTO)
         {
-            if(userRoles_DTO.UserName == null)
+            if(userRoles_DTO.dto_UserName == null)
             {
                 return BadRequest("UserId required");
             }
-            if(userRoles_DTO.RoleName == null)
+            if(userRoles_DTO.dto_RoleName == null)
             {
                 return BadRequest("RoleId required");
             }
-            bool UserExist = await context.Users.AnyAsync(u => u.Email == userRoles_DTO.UserName);
-            bool RoleExist = await context.Role.AnyAsync(r=> r.Name == userRoles_DTO.RoleName);
+            bool UserExist = await context.Users.AnyAsync(u => u.Email == userRoles_DTO.dto_UserName);
+            bool RoleExist = await context.Role.AnyAsync(r=> r.Name == userRoles_DTO.dto_RoleName);
             if (!UserExist)
             {
                 return NotFound("User not Exist");
@@ -148,8 +148,8 @@ namespace API.Controllers
             {
                 return NotFound("Role not Exist");
             }
-            var uid = (await context.Users.FirstOrDefaultAsync(u => u.Email == userRoles_DTO.UserName)).UserID;
-            var roleId = (await context.Role.FirstOrDefaultAsync(r => r.Name == userRoles_DTO.RoleName)).id;
+            var uid = (await context.Users.FirstOrDefaultAsync(u => u.Email == userRoles_DTO.dto_UserName)).UserID;
+            var roleId = (await context.Role.FirstOrDefaultAsync(r => r.Name == userRoles_DTO.dto_RoleName)).id;
             var userRoles = new UserRoles()
             {
                 UserId = uid,

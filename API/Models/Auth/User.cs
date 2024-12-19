@@ -11,7 +11,7 @@ namespace API.Models.Auth
         public string Name { get; set; }
         [Required]
         public string Email { get; set; }
-        [Required]
+        [Required]                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
         public string Role { get; set; }
         [Required]
         public string UserName { get; set; }

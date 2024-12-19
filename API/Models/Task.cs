@@ -29,10 +29,7 @@ namespace API.Models
         public DateTime ModifiedOn { get; set; }
         [Required]
         public String CreatedBy { get; set; }
-        public User user { get; set; }
         [Required]
         public string ModifiedBy { get; set; }
-        [Required]
-        public User User { get; set; }
     } 
 }

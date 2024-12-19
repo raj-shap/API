@@ -1,9 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace API.Models
 {
     public class Logs
     {
+        [Key]
         public int LogId { get; set; }
         public DateTime TimeStamp { get; set; }
         public string LogLevel { get; set; }// INFO, DEBUG, WARN, ERROR, FATAL).
