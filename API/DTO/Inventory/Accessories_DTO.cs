@@ -1,13 +1,10 @@
-﻿using API.Models;
-
-namespace API.DTO.Inventory
+﻿namespace API.DTO.Inventory
 {
-    public class Accessories
+    public class Accessories_DTO
     {
         public int dto_id { get; set; }
         public int dto_PurchaseId { get; set; }
         public string dto_SuplierId { get; set; }
-        public SupplierVendor dto_supplierVendro { get; set; }
         public string dto_Status { get; set; } // Availale | Assigned | Scrap
         public DateTime dto_CreatedOn { get; set; }
         public string dto_CreatedBy { get; set; }

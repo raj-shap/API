@@ -41,13 +41,27 @@ namespace API.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<EmployeeDetails>()
                 .HasOne(e => e.employeeDetails)
                 .WithMany()
                 .HasForeignKey(e => e.Id)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<RequiredHardware>()
+                .HasOne(e => e.EmployeeDetails)
+                .WithMany()
+                .HasForeignKey(e => e.EmpId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<ReplacedHardware>()
+                .HasOne(e=>e.employeeDetails)
+                .WithMany()
+                .HasForeignKey(e=>e.EmpId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

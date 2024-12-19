@@ -426,11 +426,64 @@ namespace API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("EmpId")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Model")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ModifiedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<double>("Price")
+                        .HasColumnType("float");
+
+                    b.Property<string>("ProductName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("PurchaseDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Qunatity")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SerialNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SupplierVendorId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("VendorId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("Warrenty")
+                        .HasColumnType("float");
+
+                    b.Property<string>("employeeId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("SupplierVendorId");
+
+                    b.HasIndex("employeeId");
 
                     b.ToTable("PurchaseDetails");
                 });
@@ -449,6 +502,10 @@ namespace API.Migrations
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("EmpId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Hardware")
                         .IsRequired()
@@ -471,17 +528,59 @@ namespace API.Migrations
                     b.Property<DateTime>("ReplacedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("employeeId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("Id");
+
+                    b.HasIndex("EmpId");
 
                     b.HasIndex("PurchaseId");
 
-                    b.HasIndex("employeeId");
-
                     b.ToTable("ReplacedHardwares");
+                });
+
+            modelBuilder.Entity("API.Models.Inventory.RequiredHardware", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateOfRequirement")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("EmpId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("HardwareName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ModifiedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Remarks")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmpId");
+
+                    b.ToTable("RequiredHardware");
                 });
 
             modelBuilder.Entity("API.Models.Logs", b =>
@@ -676,6 +775,10 @@ namespace API.Migrations
                     b.Property<DateTime>("AssignedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("AssignedTo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("CreatedBy")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -711,7 +814,6 @@ namespace API.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserID")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
@@ -787,13 +889,11 @@ namespace API.Migrations
                     b.Navigation("supplierVendro");
                 });
 
-            modelBuilder.Entity("API.Models.Inventory.ReplacedHardware", b =>
+            modelBuilder.Entity("API.Models.Inventory.PurchaseDetails", b =>
                 {
-                    b.HasOne("API.Models.Inventory.PurchaseDetails", "purchase")
+                    b.HasOne("API.Models.SupplierVendor", "SupplierVendor")
                         .WithMany()
-                        .HasForeignKey("PurchaseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("SupplierVendorId");
 
                     b.HasOne("API.Models.Employee.EmployeeDetails", "employee")
                         .WithMany()
@@ -801,9 +901,38 @@ namespace API.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("SupplierVendor");
+
                     b.Navigation("employee");
+                });
+
+            modelBuilder.Entity("API.Models.Inventory.ReplacedHardware", b =>
+                {
+                    b.HasOne("API.Models.Employee.EmployeeDetails", "employeeDetails")
+                        .WithMany()
+                        .HasForeignKey("EmpId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("API.Models.Inventory.PurchaseDetails", "purchase")
+                        .WithMany()
+                        .HasForeignKey("PurchaseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("employeeDetails");
 
                     b.Navigation("purchase");
+                });
+
+            modelBuilder.Entity("API.Models.Inventory.RequiredHardware", b =>
+                {
+                    b.HasOne("API.Models.Employee.EmployeeDetails", "EmployeeDetails")
+                        .WithMany()
+                        .HasForeignKey("EmpId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("EmployeeDetails");
                 });
 
             modelBuilder.Entity("API.Models.State", b =>
@@ -819,13 +948,11 @@ namespace API.Migrations
 
             modelBuilder.Entity("API.Models.Task", b =>
                 {
-                    b.HasOne("API.Models.Auth.User", "UserId")
+                    b.HasOne("API.Models.Auth.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserID");
 
-                    b.Navigation("UserId");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("API.Models.Country", b =>

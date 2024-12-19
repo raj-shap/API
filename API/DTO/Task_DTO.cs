@@ -1,5 +1,4 @@
-﻿using API.Models.Auth;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace API.DTO
 {
@@ -15,6 +14,8 @@ namespace API.DTO
         public string dto_SubTask { get; set; }
         [Required]
         public string dto_AssignedBy { get; set; }
+        [Required]
+        public string dto_AssignedTo { get; set; }
         [Required]
         public DateTime dto_AssignedDate { get; set; }
         [Required]

@@ -40,6 +40,5 @@ namespace API.DTO.Inventory
         public string dto_CreatedBy { get; set; }
         [Required]
         public string dto_ModifiedBy { get; set; }
-
     }
 }

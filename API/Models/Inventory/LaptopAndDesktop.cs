@@ -40,6 +40,5 @@ namespace API.Models.Inventory
         public string CreatedBy { get; set; }
         [Required]
         public string ModifiedBy { get; set; }
-
     }
 }

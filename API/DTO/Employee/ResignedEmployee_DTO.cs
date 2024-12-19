@@ -5,24 +5,24 @@ namespace API.DTO.Employee
     public class ResignedEmployee_DTO
     {
         [Required]
-        public string Id { get; set; }
+        public string dto_Id { get; set; }
         [Required]
-        public string EmpId { get; set; }
+        public string dto_EmpId { get; set; }
         [Required]
-        public DateTime ResignedDate { get; set; }
+        public DateTime dto_ResignedDate { get; set; }
         [Required]
-        public string GivenInventories { get; set; }
+        public string dto_GivenInventories { get; set; }
         [Required]
-        public string MissingInventory { get; set; }
+        public string dto_MissingInventory { get; set; }
         [Required]
-        public string InventoryTakeStatus { get; set; }
+        public string dto_InventoryTakeStatus { get; set; }
         [Required]
-        public DateTime CreatedOn { get; set; }
+        public DateTime dto_CreatedOn { get; set; }
         [Required]
-        public DateTime ModifiedOn { get; set; }
+        public DateTime dto_ModifiedOn { get; set; }
         [Required]
-        public string CreatedBy { get; set; }
+        public string dto_CreatedBy { get; set; }
         [Required]
-        public string ModifiedBy { get; set; }
+        public string dto_ModifiedBy { get; set; }
     }
 }

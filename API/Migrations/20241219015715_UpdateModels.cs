@@ -131,19 +131,6 @@ namespace API.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "PurchaseDetails",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    EmpId = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_PurchaseDetails", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Role",
                 columns: table => new
                 {
@@ -299,7 +286,8 @@ namespace API.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     SubTask = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     AssignedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    UserID = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    AssignedTo = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UserID = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     AssignedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Remark = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -315,8 +303,7 @@ namespace API.Migrations
                         name: "FK_Tasks_Users_UserID",
                         column: x => x.UserID,
                         principalTable: "Users",
-                        principalColumn: "UserID",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "UserID");
                 });
 
             migrationBuilder.CreateTable(
@@ -366,13 +353,78 @@ namespace API.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "PurchaseDetails",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    EmpId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    employeeId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ProductName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Model = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SerialNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Qunatity = table.Column<int>(type: "int", nullable: false),
+                    VendorId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SupplierVendorId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    PurchaseDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Warrenty = table.Column<double>(type: "float", nullable: false),
+                    Price = table.Column<double>(type: "float", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PurchaseDetails", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PurchaseDetails_SupplierVendors_SupplierVendorId",
+                        column: x => x.SupplierVendorId,
+                        principalTable: "SupplierVendors",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_PurchaseDetails_employeeDetails_employeeId",
+                        column: x => x.employeeId,
+                        principalTable: "employeeDetails",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RequiredHardware",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    HardwareName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    EmpId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    DateOfRequirement = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Remarks = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RequiredHardware", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_RequiredHardware_employeeDetails_EmpId",
+                        column: x => x.EmpId,
+                        principalTable: "employeeDetails",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ReplacedHardwares",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ReplacedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    employeeId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    EmpId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Hardware = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Remarark = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PurchaseId = table.Column<int>(type: "int", nullable: false),
@@ -391,11 +443,11 @@ namespace API.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ReplacedHardwares_employeeDetails_employeeId",
-                        column: x => x.employeeId,
+                        name: "FK_ReplacedHardwares_employeeDetails_EmpId",
+                        column: x => x.EmpId,
                         principalTable: "employeeDetails",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -419,14 +471,29 @@ namespace API.Migrations
                 column: "positionId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ReplacedHardwares_employeeId",
-                table: "ReplacedHardwares",
+                name: "IX_PurchaseDetails_employeeId",
+                table: "PurchaseDetails",
                 column: "employeeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PurchaseDetails_SupplierVendorId",
+                table: "PurchaseDetails",
+                column: "SupplierVendorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ReplacedHardwares_EmpId",
+                table: "ReplacedHardwares",
+                column: "EmpId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ReplacedHardwares_PurchaseId",
                 table: "ReplacedHardwares",
                 column: "PurchaseId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RequiredHardware_EmpId",
+                table: "RequiredHardware",
+                column: "EmpId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_States_CountryId",
@@ -471,22 +538,19 @@ namespace API.Migrations
                 name: "ReplacedHardwares");
 
             migrationBuilder.DropTable(
+                name: "RequiredHardware");
+
+            migrationBuilder.DropTable(
                 name: "Tasks");
 
             migrationBuilder.DropTable(
                 name: "UserRoles");
 
             migrationBuilder.DropTable(
-                name: "SupplierVendors");
-
-            migrationBuilder.DropTable(
                 name: "States");
 
             migrationBuilder.DropTable(
                 name: "PurchaseDetails");
-
-            migrationBuilder.DropTable(
-                name: "employeeDetails");
 
             migrationBuilder.DropTable(
                 name: "Role");
@@ -496,6 +560,12 @@ namespace API.Migrations
 
             migrationBuilder.DropTable(
                 name: "Countries");
+
+            migrationBuilder.DropTable(
+                name: "SupplierVendors");
+
+            migrationBuilder.DropTable(
+                name: "employeeDetails");
 
             migrationBuilder.DropTable(
                 name: "Departments");

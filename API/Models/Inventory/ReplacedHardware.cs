@@ -6,7 +6,8 @@ namespace API.Models.Inventory
     {
         public int Id { get; set; }
         public DateTime ReplacedDate { get; set; }
-        public EmployeeDetails employee { get; set; }
+        public string EmpId { get; set; }
+        public EmployeeDetails employeeDetails { get; set; }
         public string Hardware {  get; set; } 
         public string Remarark { get; set; }
         public int PurchaseId { get; set; }

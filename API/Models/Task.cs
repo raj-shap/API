@@ -16,7 +16,8 @@ namespace API.Models
         [Required]
         public string AssignedBy { get; set; }
         [Required]
-        public User UserId { get; set; }
+        public string AssignedTo { get; set; }
+        public User User { get; set; }
         [Required]
         public DateTime AssignedDate { get; set; }
         [Required]
