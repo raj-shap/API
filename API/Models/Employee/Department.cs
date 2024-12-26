@@ -8,5 +8,6 @@ namespace API.Models.Employee
         public int Id { get; set; }
         [Required]
         public string DepartmentName { get; set; }
+        public virtual ICollection<EmployeeDetails> EmployeeDetails { get; set; }
     }
 }

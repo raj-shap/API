@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace API.Migrations
 {
     /// <inheritdoc />
-    public partial class UpdateModels : Migration
+    public partial class GreycellNew : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -212,6 +212,7 @@ namespace API.Migrations
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     MiddleName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Dob = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     City = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -221,12 +222,9 @@ namespace API.Migrations
                     Phone = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     EmergencyContactName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     EmergencyContact = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Department = table.Column<int>(type: "int", nullable: false),
-                    departmentId = table.Column<int>(type: "int", nullable: false),
-                    Position = table.Column<int>(type: "int", nullable: false),
-                    positionId = table.Column<int>(type: "int", nullable: false),
-                    ReportTo = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DepartmentId = table.Column<int>(type: "int", nullable: true),
+                    PositionId = table.Column<int>(type: "int", nullable: true),
+                    ReportTo = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     EmployeementType = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -239,17 +237,15 @@ namespace API.Migrations
                 {
                     table.PrimaryKey("PK_employeeDetails", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_employeeDetails_Departments_departmentId",
-                        column: x => x.departmentId,
+                        name: "FK_employeeDetails_Departments_DepartmentId",
+                        column: x => x.DepartmentId,
                         principalTable: "Departments",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_employeeDetails_positions_positionId",
-                        column: x => x.positionId,
+                        name: "FK_employeeDetails_positions_PositionId",
+                        column: x => x.PositionId,
                         principalTable: "positions",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -461,14 +457,14 @@ namespace API.Migrations
                 column: "StateId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_employeeDetails_departmentId",
+                name: "IX_employeeDetails_DepartmentId",
                 table: "employeeDetails",
-                column: "departmentId");
+                column: "DepartmentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_employeeDetails_positionId",
+                name: "IX_employeeDetails_PositionId",
                 table: "employeeDetails",
-                column: "positionId");
+                column: "PositionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PurchaseDetails_employeeId",

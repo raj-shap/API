@@ -1,7 +1,10 @@
-﻿namespace API.Models.Inventory
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace API.Models.Inventory
 {
     public class Accessories
     {
+        [Key]
         public int id {  get; set; }
         public int PurchaseId {  get; set; }
         public string SuplierId { get; set; }

@@ -4,6 +4,8 @@ using API.Interfaces;
 using API.Models;
 using API.Models.Employee;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Repositories
 {
@@ -19,6 +21,7 @@ namespace API.Repositories
             employee.dto_Id = IdGenerator.GenerateUniqueId();
             var emp = new EmployeeDetails()
             {
+                Id = employee.dto_Id,
                 UserName = employee.dto_UserName,
                 FirstName = employee.dto_FirstName,
                 MiddleName = employee.dto_MiddleName,
@@ -33,8 +36,8 @@ namespace API.Repositories
                 Phone = employee.dto_Phone,
                 EmergencyContactName = employee.dto_EmergencyContactName,
                 EmergencyContact = employee.dto_EmergencyContact,
-                Department = employee.dto_Department,
-                Position = employee.dto_Position,
+                DepartmentId = employee.dto_Department,
+                PositionId = employee.dto_Position,
                 ReportTo = employee.dto_ReportTo,
                 EmployeementType = employee.dto_EmployeementType,
                 Status = employee.dto_Status,
@@ -50,8 +53,8 @@ namespace API.Repositories
 
         public async Task<bool> DeleteEmployee(string id)
         {
-            var emp = _dbContext.employeeDetails.Where(e=>e.Id == id).FirstOrDefault();
-            if(emp != null)
+            var emp = _dbContext.employeeDetails.Where(e => e.Id == id).FirstOrDefault();
+            if (emp != null)
             {
                 _dbContext.employeeDetails.Remove(emp);
                 await _dbContext.SaveChangesAsync();
@@ -60,9 +63,9 @@ namespace API.Repositories
             throw new KeyNotFoundException("Employee Not Found");
         }
 
-        public Task<IEnumerable<Employee_DTO>> GetAllEmployee()
+        public async Task<IEnumerable<Employee_DTO>> GetAllEmployee()
         {
-            var emp = _dbContext.employeeDetails.Select(e => new Employee_DTO()
+            var emp = await _dbContext.employeeDetails.Select(e => new Employee_DTO()
             {
                 dto_Id = e.Id,
                 dto_UserName = e.UserName,
@@ -79,8 +82,8 @@ namespace API.Repositories
                 dto_Phone = e.Phone,
                 dto_EmergencyContactName = e.EmergencyContactName,
                 dto_EmergencyContact = e.EmergencyContact,
-                dto_Department = e.Department,
-                dto_Position = e.Position,
+                dto_Department = e.DepartmentId,
+                dto_Position = e.PositionId,
                 dto_ReportTo = e.ReportTo,
                 dto_EmployeementType = e.EmployeementType,
                 dto_Status = e.Status,
@@ -89,19 +92,22 @@ namespace API.Repositories
                 dto_CreatedOn = e.CreatedOn,
                 dto_ModifiedBy = e.ModifiedBy,
                 dto_ModifiedOn = e.ModifiedOn,
-            });
+            }).ToListAsync();
 
-            return ;
+            return emp;
+
         }
 
-        public Task<Employee_DTO> GetEmployeeById(int id)
+        public async Task<EmployeeDetails> GetEmployeeById(string id)
         {
-            throw new NotImplementedException();
+            var emp = await _dbContext.employeeDetails.FindAsync(id);
+            return emp;
         }
 
-        public Task UpdateEmployee(Employee_DTO employee)
+        public async Task UpdateEmployee(EmployeeDetails employee)
         {
-            throw new NotImplementedException();
+            _dbContext.employeeDetails.Update(employee);
+            await _dbContext.SaveChangesAsync();
         }
 
     }

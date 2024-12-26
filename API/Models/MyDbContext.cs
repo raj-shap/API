@@ -1,4 +1,5 @@
-﻿using API.Models.Auth;
+﻿using API.Config;
+using API.Models.Auth;
 using API.Models.Employee;
 using API.Models.Inventory;
 using Microsoft.EntityFrameworkCore;
@@ -41,6 +42,11 @@ namespace API.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
+            //modelBuilder.ApplyConfiguration(new EmployeeConfig());
+            //modelBuilder.ApplyConfiguration(new DepartmentConfig());
+            //modelBuilder.ApplyConfiguration(new PositionConfig());
+
 
             modelBuilder.Entity<EmployeeDetails>()
                 .HasOne(e => e.employeeDetails)

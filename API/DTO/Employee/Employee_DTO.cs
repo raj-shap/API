@@ -41,9 +41,9 @@ namespace API.DTO.Employee
 
         /////////////// :Position Information: ///////////////
         [Required]
-        public int dto_Department { get; set; }
+        public int? dto_Department { get; set; }
         [Required]
-        public int dto_Position { get; set; } // Intern | Junior | Senior | Manager | HOD | BOD 
+        public int? dto_Position { get; set; } // Intern | Junior | Senior | Manager | HOD | BOD 
         [Required]
         public string dto_ReportTo { get; set; }
         [Required]

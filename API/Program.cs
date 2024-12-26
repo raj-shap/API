@@ -1,5 +1,8 @@
 //using API.Interfaces;
+using API.Interfaces;
 using API.Models;
+using API.Repositories;
+using API.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -17,6 +20,11 @@ var provider = builder.Services.BuildServiceProvider();
 var config = provider.GetService<IConfiguration>();
 //builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(config.GetConnectionString("")));
 builder.Services.AddDbContext<MyDbContext>(option => option.UseSqlServer(config.GetConnectionString("dbcs")));
+
+builder.Services.AddScoped<IEmployee, EmployeeRepository>(); // Register the repository
+builder.Services.AddScoped<EmployeeService>();
+builder.Services.AddScoped<IDepartment, DeprtmentRepository>();
+builder.Services.AddScoped<DepartmentService>();
 //builder.Services.AddTransient<IAuthService, IAuthService>();
 //builder.Services.AddTransient<IEmployeeService, IEmployeeService>();
 

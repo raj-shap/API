@@ -193,7 +193,7 @@ namespace API.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Department")
+                    b.Property<int?>("DepartmentId")
                         .HasColumnType("int");
 
                     b.Property<string>("Dob")
@@ -239,7 +239,7 @@ namespace API.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Position")
+                    b.Property<int?>("PositionId")
                         .HasColumnType("int");
 
                     b.Property<string>("PostalCode")
@@ -247,7 +247,6 @@ namespace API.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ReportTo")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("StartDate")
@@ -265,17 +264,11 @@ namespace API.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("departmentId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("positionId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("departmentId");
+                    b.HasIndex("DepartmentId");
 
-                    b.HasIndex("positionId");
+                    b.HasIndex("PositionId");
 
                     b.ToTable("employeeDetails");
                 });
@@ -763,7 +756,7 @@ namespace API.Migrations
                     b.ToTable("SupplierVendors");
                 });
 
-            modelBuilder.Entity("API.Models.Task", b =>
+            modelBuilder.Entity("API.Models.Tasks", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -855,23 +848,19 @@ namespace API.Migrations
 
             modelBuilder.Entity("API.Models.Employee.EmployeeDetails", b =>
                 {
+                    b.HasOne("API.Models.Employee.Department", "department")
+                        .WithMany("EmployeeDetails")
+                        .HasForeignKey("DepartmentId");
+
                     b.HasOne("API.Models.Employee.EmployeeDetails", "employeeDetails")
                         .WithMany()
                         .HasForeignKey("Id")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("API.Models.Employee.Department", "department")
-                        .WithMany()
-                        .HasForeignKey("departmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("API.Models.Employee.Position", "position")
-                        .WithMany()
-                        .HasForeignKey("positionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("Details")
+                        .HasForeignKey("PositionId");
 
                     b.Navigation("department");
 
@@ -946,7 +935,7 @@ namespace API.Migrations
                     b.Navigation("Country");
                 });
 
-            modelBuilder.Entity("API.Models.Task", b =>
+            modelBuilder.Entity("API.Models.Tasks", b =>
                 {
                     b.HasOne("API.Models.Auth.User", "User")
                         .WithMany()
@@ -958,6 +947,16 @@ namespace API.Migrations
             modelBuilder.Entity("API.Models.Country", b =>
                 {
                     b.Navigation("States");
+                });
+
+            modelBuilder.Entity("API.Models.Employee.Department", b =>
+                {
+                    b.Navigation("EmployeeDetails");
+                });
+
+            modelBuilder.Entity("API.Models.Employee.Position", b =>
+                {
+                    b.Navigation("Details");
                 });
 
             modelBuilder.Entity("API.Models.State", b =>
