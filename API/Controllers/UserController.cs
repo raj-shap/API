@@ -7,6 +7,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using API.Models.Auth;
 using API.DTO.Auth;
+using System.Security.Claims;
+
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace API.Controllers
 {
@@ -15,9 +20,11 @@ namespace API.Controllers
     public class UserController : ControllerBase
     {
         private readonly MyDbContext context;
-        public UserController(MyDbContext context)
+        private readonly IConfiguration _configuration;
+        public UserController(MyDbContext context, IConfiguration configuration)
         {
             this.context = context;
+            _configuration = configuration;
         }
         [HttpPost("Registration")]
         public async Task<ActionResult<User>> CreateUser(Registration_DTO registration_dto)
@@ -56,6 +63,7 @@ namespace API.Controllers
                 UserName = registration_dto.dto_UserName,
                 phone = registration_dto.dto_phone,
                 Password = UserAuth.EncryptSec(registration_dto.dto_Password),
+                Status = registration_dto.dto_Status,
                 //CreatedOn = registration_dto.dto_CreatedOn,
                 CreatedOn = DateTime.Now,
                 CreatedBy = registration_dto.dto_CreatedBy,
@@ -100,8 +108,32 @@ namespace API.Controllers
             var getUserId = (await context.Users.FirstOrDefaultAsync(u => u.Email == login_DTO.dto_UserName || u.phone == login_DTO.dto_UserName)).UserID;
             var getRoleId = (await context.UserRoles.FirstOrDefaultAsync(r => r.UserId == getUserId)).RoleId;
             var roleName = (await context.Role.FirstOrDefaultAsync(r => r.id == getRoleId)).Name;
+            var claims = new List<Claim>
+            {
+                new Claim(JwtRegisteredClaimNames.Sub, _configuration["Jwt:Subject"]),
+                new Claim("Id",user.UserID),
+                new Claim("UserName",user.UserName),
+            };
+            var userRoles = context.UserRoles.Where(u=> u.UserId == user.UserID).ToList();
+            var roleIds = userRoles.Select(s=>s.RoleId).ToList();
+            var roles = context.Role.Where(r=>roleIds.Contains(r.id)).ToList();
+            foreach(var role in roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role,role.Name));
+            }
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+            var signIn = new SigningCredentials(key,SecurityAlgorithms.HmacSha256);
+            var token = new JwtSecurityToken(
+                    _configuration["Jwt:Issuer"],
+                    _configuration["Jwt:Audience"],
+                    claims,
+                    expires:DateTime.UtcNow.AddMinutes(10),
+                    signingCredentials:signIn
+                );
+            var jwtToken = new JwtSecurityTokenHandler().WriteToken(token);
+            return Ok(jwtToken);
             
-            return Ok("Login Successfully");
+            //return Ok("Login Successfully");
 
         }
         [HttpPost("add-Role")]

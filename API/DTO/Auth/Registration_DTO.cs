@@ -21,6 +21,8 @@ namespace API.DTO.Auth
         [Required]
         public string dto_ConfirmPassowrd { get; set; }
         [Required]
+        public string dto_Status { get; set; }
+        [Required]
         public DateTime dto_CreatedOn { get; set; }
         [Required]
         public string dto_CreatedBy { get; set; }

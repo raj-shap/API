@@ -35,7 +35,7 @@ namespace API.Models
         public virtual DbSet<Country> Countries { get; set; }
         public virtual DbSet<State> States { get; set; }
         public virtual DbSet<City> Cities { get; set; }
-        public virtual DbSet<Task> Tasks { get; set; }
+        public virtual DbSet<Tasks> Tasks { get; set; }
         public virtual DbSet<ProbleSolution> ProblemSolutions { get; set; }
         public virtual DbSet<Logs> Logs { get; set; }
 

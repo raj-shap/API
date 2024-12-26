@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace API.Models
 {
-    public class Task
+    public class Tasks
     {
         [Required]
         public string Id { get; set; }

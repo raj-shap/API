@@ -20,6 +20,8 @@ namespace API.Models.Employee
         [Required]
         public string LastName { get; set; }
         [Required]
+        public string Email { get; set; }
+        [Required]
         public string Dob { get; set; }
         [Required]
         public string Address { get; set; }
@@ -38,10 +40,8 @@ namespace API.Models.Employee
         [Required]
         public string EmergencyContact { get; set; }
         [Required]
-        public string Email { get; set; }
 
         /////////////// :Position Information: ///////////////
-        [Required]
         public int Department { get; set; }
         public Department department { get; set; }
         [Required]

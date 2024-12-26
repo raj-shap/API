@@ -1,3 +1,4 @@
+//using API.Interfaces;
 using API.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -16,13 +17,18 @@ var provider = builder.Services.BuildServiceProvider();
 var config = provider.GetService<IConfiguration>();
 //builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(config.GetConnectionString("")));
 builder.Services.AddDbContext<MyDbContext>(option => option.UseSqlServer(config.GetConnectionString("dbcs")));
+//builder.Services.AddTransient<IAuthService, IAuthService>();
+//builder.Services.AddTransient<IEmployeeService, IEmployeeService>();
 
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
 }).AddJwtBearer(options =>
 {
+    options.RequireHttpsMetadata = false;
+    options.SaveToken = true;
     options.TokenValidationParameters = new TokenValidationParameters
     {
         ValidateIssuer = true,
@@ -34,6 +40,8 @@ builder.Services.AddAuthentication(options =>
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:key"]))
     };
 });
+builder.Services.AddAuthorization();
+
 
 var app = builder.Build();
 

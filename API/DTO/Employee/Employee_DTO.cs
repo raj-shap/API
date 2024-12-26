@@ -19,6 +19,8 @@ namespace API.DTO.Employee
         [Required]
         public string dto_LastName { get; set; }
         [Required]
+        public string dto_Email { get; set; }
+        [Required]
         public string dto_Dob { get; set; }
         [Required]
         public string dto_Address { get; set; }
@@ -36,14 +38,12 @@ namespace API.DTO.Employee
         public string dto_EmergencyContactName { get; set; }
         [Required]
         public string dto_EmergencyContact { get; set; }
-        [Required]
-        public string dto_Email { get; set; }
 
         /////////////// :Position Information: ///////////////
         [Required]
-        public string dto_Department { get; set; }
+        public int dto_Department { get; set; }
         [Required]
-        public string dto_Position { get; set; } // Intern | Junior | Senior | Manager | HOD | BOD 
+        public int dto_Position { get; set; } // Intern | Junior | Senior | Manager | HOD | BOD 
         [Required]
         public string dto_ReportTo { get; set; }
         [Required]
