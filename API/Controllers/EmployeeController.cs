@@ -14,12 +14,10 @@ namespace API.Controllers
     [ApiController]
     public class EmployeeController : ControllerBase
     {
-        private readonly IEmployee _employeeRepository;
         private readonly EmployeeService _employeeService;
 
-        public EmployeeController(IEmployee employeeRepository, EmployeeService employeeService)
+        public EmployeeController(EmployeeService employeeService)
         {
-            _employeeRepository = employeeRepository ?? throw new ArgumentNullException(nameof(EmployeeRepository));
             _employeeService = employeeService ?? throw new ArgumentNullException(nameof(EmployeeService));
         }
 
@@ -27,17 +25,21 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> AddEmployee(Employee_DTO employee)
+        public async Task<ActionResult<Employee_DTO>> AddEmployee(Employee_DTO employeeDto)
         {
-            if(employee is null)
+            if (employeeDto is null)
             {
                 return BadRequest("Employee Data is null.");
             }
-            await _employeeRepository.AddEmployee(employee);
-
-            //await _dbContext.employeeDetails.AddAsync(employee);
-            //await _dbContext.SaveChangesAsync();
-            return Ok(employee);
+            try
+            {
+                var addedEmployee = await _employeeService.AddEmployee(employeeDto);
+                return CreatedAtAction(nameof(AddEmployee), new { id = addedEmployee.dto_Id }, addedEmployee);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Internl Server error : {ex.Message}");
+            }
         }
 
         [HttpGet("GetAllEmployees")]
@@ -48,12 +50,19 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetAllEmployees()
         {
-            var employee = await _employeeRepository.GetAllEmployee();
-            if(employee is null|| !employee.Any())
+            try
             {
-                return NotFound("No Data Found");
+                var employee = await _employeeService.GetAllEmployees();
+                if (employee is null || !employee.Any())
+                {
+                    return NotFound("No Data Found");
+                }
+                return Ok(employee);
             }
-            return Ok(employee);
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Internl Server error : {ex.Message}");
+            }
         }
 
         [HttpGet("{id}")]
@@ -65,16 +74,24 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status502BadGateway)]
         public async Task<IActionResult> GetEmployeeById(string id)
         {
-            if(id == null)
+
+            if (string.IsNullOrEmpty(id))
             {
                 return BadRequest("Please enter a valid Id");
             }
-            var employee = await _employeeService.GetEmployeeById(id);
-            if(employee == null)
+            try
             {
-                return NotFound($"Employee with ID {id} Not Found.");
+                var employee = await _employeeService.GetEmployeeById(id);
+                if (employee == null)
+                {
+                    return NotFound($"Employee with ID {id} Not Found.");
+                }
+                return Ok(employee);
             }
-            return Ok(employee);
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Internl Server error : {ex.Message}");
+            }
         }
 
         [HttpPut("{id}")]
@@ -84,18 +101,48 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status502BadGateway)]
         [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
-        public async Task<IActionResult> UpdateEmployee(string id,Employee_DTO employee)
+        public async Task<IActionResult> UpdateEmployee(string id, Employee_DTO employee)
         {
-            if(id == null)
+            if (string.IsNullOrEmpty(id))
             {
                 return BadRequest("Please enter a valid id");
             }
-            var updateEmployee = await _employeeService.UpdateEmployee(id, employee);
-            if(updateEmployee == null)
+            try
             {
-                return NotFound($"employee with Id {id} not found");
+                var updateEmployee = await _employeeService.UpdateEmployee(id, employee);
+                if (updateEmployee == null)
+                {
+                    return NotFound($"employee with Id {id} not found");
+                }
+                return Ok(updateEmployee);
             }
-            return Ok(updateEmployee);
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Internl Server error : {ex.Message}");
+            }
+        }
+
+        [HttpDelete]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
+        [ProducesResponseType(StatusCodes.Status502BadGateway)]
+        public async Task<IActionResult> DeleteEmployee(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                return BadRequest("Please enter a valid Id");
+            }
+            try
+            {
+                await _employeeService.DeleteEmployee(id);
+                return Ok("Employee Deleted Successfully");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Internl Server error : {ex.Message}");
+            }
         }
     }
 }

@@ -1,5 +1,6 @@
 //using API.Interfaces;
 using API.Interfaces;
+using API.Middlewares;
 using API.Models;
 using API.Repositories;
 using API.Services;
@@ -63,6 +64,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
+
+app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
 
 app.UseAuthorization();
 

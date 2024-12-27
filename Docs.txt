@@ -1,0 +1,5 @@
+Asynchronous I/O Operations: Methods like SaveChangesAsync(), ToListAsync(), and FirstOrDefaultAsync() are inherently asynchronous, meaning they perform database queries and operations without blocking the main thread. Using Task with async ensures that the main thread (usually the UI or web server thread) remains responsive.
+
+Efficiency: It allows the server or application to handle multiple requests simultaneously without getting blocked, as other tasks can be processed while waiting for the database operation to complete.
+
+Thread Management: Using Task avoids blocking threads unnecessarily. It enables the Thread Pool to manage the available threads more efficiently.

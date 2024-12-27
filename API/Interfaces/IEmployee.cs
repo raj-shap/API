@@ -5,9 +5,9 @@ namespace API.Interfaces
 {
     public interface IEmployee
     {
-        Task<IEnumerable<Employee_DTO>> GetAllEmployee();
+        Task<IEnumerable<EmployeeDetails>> GetAllEmployee();
         Task<EmployeeDetails> GetEmployeeById(string id);
-        Task AddEmployee(Employee_DTO employee);
+        Task<EmployeeDetails> AddEmployee(EmployeeDetails employee);
         Task<bool> DeleteEmployee(string id);
         Task UpdateEmployee(EmployeeDetails employee);
     }
