@@ -5,6 +5,7 @@ using API.Models;
 using API.Models.Employee;
 using API.Repositories;
 using API.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,6 +13,7 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class EmployeeController : ControllerBase
     {
         private readonly EmployeeService _employeeService;
@@ -49,7 +51,7 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status502BadGateway)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetAllEmployees()
-        {
+            {
             try
             {
                 var employee = await _employeeService.GetAllEmployees();

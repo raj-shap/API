@@ -10,7 +10,7 @@ namespace API.Repositories
     public class EmployeeRepository : IEmployee
     {
         private MyDbContext _dbContext;
-        public EmployeeRepository(MyDbContext dbContext)
+        public EmployeeRepository(MyDbContext    dbContext)
         {
             _dbContext = dbContext;
         }
