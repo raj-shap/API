@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using Microsoft.IdentityModel.Tokens;
 
 namespace API.Middlewares
 {
@@ -18,6 +19,11 @@ namespace API.Middlewares
             try
             {
                 await _next(context);
+            }
+            catch (SecurityTokenExpiredException)
+            {
+                context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                await context.Response.WriteAsync("Token has expired.");
             }
             catch (Exception ex)
             {

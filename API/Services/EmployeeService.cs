@@ -3,10 +3,12 @@ using API.Helpers;
 using API.Interfaces;
 using API.Models.Employee;
 using API.Utilities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace API.Services
 {
+    [Authorize]
     public class EmployeeService
     {
         private readonly IEmployee _employeeRepository;

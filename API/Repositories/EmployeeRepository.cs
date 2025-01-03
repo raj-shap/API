@@ -3,14 +3,16 @@ using API.Helpers;
 using API.Interfaces;
 using API.Models;
 using API.Models.Employee;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Repositories
 {
+    [Authorize]
     public class EmployeeRepository : IEmployee
     {
         private MyDbContext _dbContext;
-        public EmployeeRepository(MyDbContext dbContext)
+        public EmployeeRepository(MyDbContext    dbContext)
         {
             _dbContext = dbContext;
         }

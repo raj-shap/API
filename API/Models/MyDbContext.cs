@@ -40,6 +40,8 @@ namespace API.Models
         public virtual DbSet<ProbleSolution> ProblemSolutions { get; set; }
         public virtual DbSet<Logs> Logs { get; set; }
 
+        public virtual DbSet<Token> Tokens { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 

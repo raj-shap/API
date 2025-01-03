@@ -4,8 +4,9 @@ namespace API.Models.Auth
 {
     public class Role
     {
+        [Key]
         [Required]
-        public string id { get; set; }
+        public string Id { get; set; }
         [Required]
         public string Name { get; set; }
     }

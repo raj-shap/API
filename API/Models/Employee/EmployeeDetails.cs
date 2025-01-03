@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace API.Models.Employee
 {
@@ -49,6 +50,7 @@ namespace API.Models.Employee
         public virtual Position? position { get; set; }
         
         public string? ReportTo { get; set; }
+        [JsonIgnore]
         public virtual EmployeeDetails? employeeDetails { get; set; }
         
         public string EmployeementType { get; set; } // part time | full time | remote | hybrid

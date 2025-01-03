@@ -13,7 +13,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddNewtonsoftJson(options =>
+{
+    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+});
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -22,12 +25,18 @@ var config = provider.GetService<IConfiguration>();
 //builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(config.GetConnectionString("")));
 builder.Services.AddDbContext<MyDbContext>(option => option.UseSqlServer(config.GetConnectionString("dbcs")));
 
+
+
+/////////////////// : Repositories and Services Start: ///////////////////
+
 builder.Services.AddScoped<IEmployee, EmployeeRepository>(); // Register the repository
 builder.Services.AddScoped<EmployeeService>();
 builder.Services.AddScoped<IDepartment, DeprtmentRepository>();
 builder.Services.AddScoped<DepartmentService>();
-//builder.Services.AddTransient<IAuthService, IAuthService>();
-//builder.Services.AddTransient<IEmployeeService, IEmployeeService>();
+builder.Services.AddScoped<IAuth, AuthRepository>();
+builder.Services.AddScoped<AuthService>();
+
+/////////////////// : Repositories and Services End: ///////////////////
 
 builder.Services.AddAuthentication(options =>
 {
@@ -40,13 +49,14 @@ builder.Services.AddAuthentication(options =>
     options.SaveToken = true;
     options.TokenValidationParameters = new TokenValidationParameters
     {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
         ValidateIssuer = true,
         ValidateAudience = true,
         ValidateLifetime = true,
-        ValidateIssuerSigningKey = true,
         ValidIssuer = builder.Configuration["Jwt:Issuer"],
-        ValidAudience = builder.Configuration["Jwt:Audinece"],
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:key"]))
+        ValidAudience = builder.Configuration["Jwt:Audience"],
+        ClockSkew = TimeSpan.Zero // Set to zero to ensure strict expiration time check
     };
 });
 builder.Services.AddAuthorization();
