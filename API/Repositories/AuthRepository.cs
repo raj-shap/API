@@ -77,7 +77,10 @@ namespace API.Repositories
             }
         }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 6beb24b5378205fffd940c8b3a9317f601c968ca
         public string Login(LoginRequest loginRequest)
         {
             var user = _myDbContext.Users.SingleOrDefault(s => s.Email == loginRequest.UserName);
@@ -88,6 +91,7 @@ namespace API.Repositories
                 {
                     throw new Exception("Please Enter a valid Credential");
                 }
+<<<<<<< HEAD
 
                 var jwtToken = JWT.GenerateJwtToken(user.UserID,user.Name,user.Email, _configuration);
                 //var claims = new[]
@@ -109,6 +113,27 @@ namespace API.Repositories
                 //    expires: DateTime.UtcNow.AddMinutes(100),
                 //    signingCredentials: signIn);
                 //var jwtToken = new JwtSecurityTokenHandler().WriteToken(token);
+=======
+                var claims = new[]
+                {
+                    new Claim(JwtRegisteredClaimNames.Sub, _configuration["Jwt:Subject"]),
+                    new Claim("Id",user.UserID),
+                    new Claim("UserName",user.Name),
+                    new Claim("Email",user.Email),
+                };
+
+                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+                //var signIn = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+                var signIn = new SigningCredentials(key, SecurityAlgorithms.HmacSha512);
+                var token = new JwtSecurityToken(
+                    _configuration["Jwt:Issuer"],
+                    _configuration["Jwt:Audience"],
+                    claims,
+                    expires: DateTime.UtcNow.AddMinutes(10),
+                    signingCredentials: signIn);
+
+                var jwtToken = new JwtSecurityTokenHandler().WriteToken(token);
+>>>>>>> 6beb24b5378205fffd940c8b3a9317f601c968ca
                 return jwtToken;
             }
             else
@@ -116,6 +141,7 @@ namespace API.Repositories
                 throw new Exception("User Not Found");
             }
         }
+<<<<<<< HEAD
         
         //public async Task<Token> GenerateNewTokenAsync(string userId)
         //{
@@ -145,5 +171,7 @@ namespace API.Repositories
             }
             return true;
         }
+=======
+>>>>>>> 6beb24b5378205fffd940c8b3a9317f601c968ca
     }
 }

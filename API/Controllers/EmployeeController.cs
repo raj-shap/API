@@ -58,7 +58,7 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [Authorize]
         public async Task<IActionResult> GetAllEmployees()
-        {
+            {
             try
             {
                 var employee = await _employeeService.GetAllEmployees();
