@@ -65,7 +65,7 @@ namespace API.Repositories
             var emp = await _dbContext.employeeDetails.FirstOrDefaultAsync(e => e.Id == id);
             if (emp == null)
             {
-                throw new KeyNotFoundException("Employee Not Found");
+                throw new Exception("Employee Not Found");
             }
             try
             {

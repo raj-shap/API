@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    [Authorize("User")]
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class UserRoleController : ControllerBase
